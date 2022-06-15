@@ -670,7 +670,7 @@ function Dashboard(){
           </div>
         </div>
         <div className="col-lg-3 col-sm-6">
-          <div className="card gradient-4">
+          <div className="card gradient-3">
             <div className="card-body">
               <h3 className="card-title text-white">Customer Satisfaction</h3>
               <div className="d-inline-block">
@@ -683,15 +683,16 @@ function Dashboard(){
             </div>
           </div>
         </div>
-      </div>
-      
-      
-      
+            
       <div class="footer">
             <div class="copyright">
                 <p>Copyright &copy; Designed & Developed by <a href="https://themeforest.net/user/quixlab">Aanchal</a> 2022</p>
             </div>
         </div>
+      </div>
+      
+      
+  
    
       
     </div>
