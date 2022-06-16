@@ -1,9 +1,20 @@
 import React from 'react'
+import Nav from '../Component/nav'
+import Footer from './footer'
+import SideBar from './sideBar'
+import { Link, useNavigate } from 'react-router-dom'
+import config from '../config/config';
+
 
 export default function EditProfile() {
   return (
-    
-    <div className="container-fluid">
+   
+      <div>
+        <Nav/>
+     <SideBar/>
+
+<div>
+<div className="row justify-content-center h-100">
     <div className="row">
       <div className="col-lg-12">
         <div className="card">
@@ -33,15 +44,19 @@ export default function EditProfile() {
                     placeholder="Edit Email"
                   />
                 </div>
-                <button class="btn login-form__btn submit w-100" >Submit</button>
+                <Link to={`${config.baseUrl}profile`}><button class="btn login-form__btn submit w-100">Submit</button></Link>  
 
               </form>
+              <Footer/>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+  </div>
+
   
 )
 }
