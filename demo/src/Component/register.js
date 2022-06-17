@@ -1,37 +1,63 @@
 import React from 'react'
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom'
 import config from '../config/config';
+import { RegisterAction } from '../Action/user.action';
+
 
 
 export default function Register() {
-
-    const navigate = useNavigate();
+    const [form, setForm] = useState({ first_name: '', last_name: '', email: '', password: '', confirm_password: '' })
+    const inputHandler = (e) => {
+        const { name, value } = e.target
+        setForm((old) => {
+            return { ...old, [name]: value }
+        })
+    }
+    const SubmitForm = async (e) => {
+        e.preventDefault()
+    
+            let res = await RegisterAction(form);
+            if (res.success) {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+            }
+    
+    }
 
   return (
-  <div class="login-form-bg h-100">
-    <div class="container h-100">
-        <div class="row justify-content-center h-100">
-            <div class="col-xl-6">
-                <div class="form-input-content">
-                    <div class="card login-form mb-0">
-                        <div class="card-body pt-5">
+  <div className="login-form-bg h-100">
+    <div className="container h-100">
+        <div className="row justify-content-center h-100">
+            <div className="col-xl-6">
+                <div className="form-input-content">
+                    <div className="card login-form mb-0">
+                        <div className="card-body pt-5">
                             
-                                <a class="text-center" href="index.html"> <h4>Rosella</h4></a>
+                                <a className="text-center" > <h4>SignUp </h4></a>
     
-                            <form class="mt-5 mb-5 login-input">
-                                <div class="form-group">
-                                    <input type="text" class="form-control"  placeholder="Name" required/>
+                            <form className="mt-5 mb-5 login-input">
+                                <div className="form-group">
+                                    <input type="text" className="form-control" onChange={inputHandler} name="first_name" placeholder="Enter First Name" required/>
                                 </div>
-                                <div class="form-group">
-                                    <input type="email" class="form-control"  placeholder="Email" required/>
+                                <div className="form-group">
+                                    <input type="text" className="form-control"  onChange={inputHandler}  name="last_Name" placeholder="Enter Last Namer" required/>
                                 </div>
-                                <div class="form-group">
-                                    <input type="password" class="form-control" placeholder="Password" required/>
+                                <div className="form-group">
+                                    <input type="email" className="form-control" onChange={inputHandler}  name='email' placeholder="Enter Email" required/>
                                 </div>
-                                <button class="btn login-form__btn submit w-100">Sign Up</button>
+                                <div className="form-group">
+                                    <input type="password" className="form-control" onChange={inputHandler}  name="Password" placeholder="Enter Password" required/>
+                                </div>
+                                <div className="form-group">
+                                    <input type="password" className="form-control" onChange={inputHandler}  name="confirm_password" placeholder="Confirm Password" required/>
+                                </div>
+                                <button className="btn login-form__btn submit w-100" onClick={SubmitForm}>Sign Up</button>
                             </form>
                     
-                               <p class="mt-5 login-form__footer">Already Have account ? <Link to={`${config.baseUrl}`}>Sign In</Link> now</p>
+                               <p className="mt-5 login-form__footer">Already Have account ? <Link to={`${config.baseUrl}`}>Sign In</Link> now</p>
                                
                                  
 </div>

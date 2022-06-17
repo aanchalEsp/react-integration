@@ -7,6 +7,8 @@ import LoadBackground from '../Component/fetch'
 import Dashboard from '../Component/dashboard'
 import Profile from '../Component/profile'
 import EditProfile from '../Component/editProfile'
+import LoginApi from '../Component/loginApi'
+
 
 
 
@@ -23,6 +25,8 @@ const RouterComponent = () => {
                     <Route exact path={`${config.baseUrl}editprofile`} element={<EditProfile/>} />
                     <Route exact path={`${config.baseUrl}`} element={<Login/>} /> 
                     <Route exact path={`${config.baseUrl}fetch`} element={<LoadBackground/>} /> 
+                    <Route exact path={`${config.baseUrl}loginapi`} element={<LoginApi/>} /> 
+
                 </Routes>
             </div>
     </BrowserRouter>
