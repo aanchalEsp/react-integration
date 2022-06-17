@@ -3,7 +3,7 @@ import axios from 'axios'
 // const token = (!Cookies.get('token')) ? [] : JSON.parse(Cookies.get('token'));
 
 export const request = (path, data, method) => {
-    const serverPath = 'https://espsofttech.org:6009/api'
+    const serverPath = 'https://espsofttech.org:6030/api/registration'
     // const serverPath = 'http://localhost:8000/api'
 
     var options = {
@@ -17,38 +17,35 @@ export const request = (path, data, method) => {
     // if (token) {
     //     options.headers['Authorization'] = token
     // }
-    if (method === 'GET') {
-        options['params'] = data
-    } else {
-        options['data'] = data
-    }
+    // if (method === 'GET') {
+    //     options['params'] = data
+    // } else {
+    //     options['data'] = data
+    // }
     let res = axios(options)
     res.then(res1 => { })
     return res
 }
 
-export const requestFormData = (path, data, method) => {
-     const serverPath = 'https://espsofttech.org:6009/api'
-    // const serverPath = 'http://localhost:8000/api'
+// export const requestFormData = (path, data, method) => {
+//      const serverPath = 'https://espsofttech.org:6030/api/registration'
+//     // const serverPath = 'http://localhost:8000/api'
 
-    var form_data = new FormData();
-    for (var key in data) {
-        form_data.append(key, data[key]);
-    }
-    var options = {
-        method: method,
-        url: `${serverPath}/${path}`,
-        data : form_data,
-        headers: { authorization: token },
-    };
-    let res = axios(options);
-    res.then(res1 => { })
-    return res
-}
+//     var form_data = new FormData();
+//     for (var key in data) {
+//         form_data.append(key, data[key]);
+//     }
+//     var options = {
+//         method: method,
+//         url: `${serverPath}/${path}`,
+//         data : form_data,
+//         // headers: { authorization: token },
+//     };
+//     let res = axios(options);
+//     res.then(res1 => { })
+//     return res
+// }
 
 export const postRequest = async (path, data) => await request(path, data, 'POST')
-export const getRequest = async (path, data) => await request(path, data, 'GET')
-export const putRequest = async (path, data) => await request(path, data, 'PUT')
-export const deleteRequest = async (path, data) => await request(path, data, 'DELETE')
 
-export const postRequestFormData = async (path, data) => await requestFormData(path, data, 'POST') 
+
