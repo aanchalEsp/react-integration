@@ -1,11 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import config from '../config/config';
+import { LoginAction } from '../Action/user.action';
+
 
 export default function Login(props) {
 
+    const[form,setForm]=useState({email:"",password:""})
+    // const[error,setError]=useState({})
+
+    const inputHandler = (e) => {
+        const { name, value } = e.target
+        setForm((old) => {
+            return { ...old, [name]: value }
+        })
+    }
+
+
+ const SubmitForm = async (e) => {
+    e.preventDefault()
    
-        const navigate = useNavigate();
+        let res = await LoginAction(form);
+        if (res.success) {   
+            alert("login sucess")
+          
+            setTimeout(() => {
+                window.location.href = `${config.baseUrl}dashboard` ;
+            }, 2000);
+        } else {
+            alert("login failed please registered")
+        }
+    
+}
+   
 
   return (
      <div class="login-form-bg h-100">
@@ -19,12 +46,13 @@ export default function Login(props) {
     
                             <form class="mt-5 mb-5 login-input">
                                 <div class="form-group">
-                                    <input type="email" class="form-control" placeholder="Email"/>
+                                    <input type="email" class="form-control" placeholder="Email" name="email" onChange={inputHandler}/>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" class="form-control" placeholder="Password"/>
+                                    <input type="password" class="form-control" placeholder="Password" name="password" onChange={inputHandler}/>
                                 </div>
-                                <button class="btn login-form__btn submit w-100" onClick={() => navigate("/demo/dashboard")}>Sign In</button>
+
+                                <button class="btn login-form__btn submit w-100" onClick={SubmitForm}>Sign In</button>
                             </form>
                             <p class="mt-5 login-form__footer">Dont have account? <Link to={`${config.baseUrl}register`}>Sign Up</Link> now</p>
                         </div>

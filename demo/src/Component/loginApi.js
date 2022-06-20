@@ -1,78 +1,83 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState } from 'react';
-// import {unstable_HistoryRouter} from 'react-router-dom'
+import { RegisterAction } from '../Action/user.action';
 
-export default function LoginApi() {
-    const[email, setemail]=useState("")
-    const[password, setPassword]=useState("")
-    const[error,setError]=useState({email:"", password:""})
 
- const inputemail=(e)=>{
-    setemail(e.target.value)
- }
- const inputPassword=(e)=>{
-    setPassword(e.target.value)
- }
-// api data=
-// https://espsofttech.org:6030/api/registration
+export default  function LoginApi() {
+   const [form, setForm] = useState({ first_name: '', last_name: '', email: '', password: '', confirm_password: '', wallet_address: '', termscondition: false })
 
-// {
-// 	"first_name" : "Pawan",
-// 	"last_name" : "Parmar",
-// 	"email" : "pawan.espsofttech@gmail.com",
-// 	"password" : "Espsoft123#",
-// 	"confirm_password" : "Espsoft123#"
-// }
+    const inputHandler = (e) => {
+      const { name, value } = e.target
+      setForm((old) => {
+          return { ...old, [name]: value }
+      })
+  }
+
  const onSubmit=(e)=>{
-  let item={email,password}
-  console.log(item)
+  e.preventDefault();
 
- let res=fetch("https://reqres.in/api/register",{
-    method:"POST",
-    body:JSON.stringify(item),
-    headers: {
-      'Content-type': 'application/json; charset=UTF-8',
-    },
+  let res =  RegisterAction(form);
+  if (res.success) {
+    alert("sucess")
+                   setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
+                } else {
+                    alert("failure")
+    
+                }
 
-  }) .then((result) => result.json())
-  .then((json) => console.log(json));
-  
-  console.log(res)
+  // const item=(form)
+  // console.log(item)
+  // let res=fetch("https://espsofttech.org:6030/api/registration",{
+  //   method:"POST",
+  //   body:JSON.stringify(item),
+  //   headers: {
+  //     'Content-type': 'application/json; charset=UTF-8',
+  //   },
 
-e.preventDefault();
-if(email.length<5 && password.length<5){
-    setError({email:"email is too short", password:"password is too short"})(email.length<5)
-}
-else if(password.length<5){
-    setError({password:"password is too short"})
-}
-else if(email.length<5){
-    setError({email:"length is too short"})
+  // }) .then((result) => result.json())
+  // .then((json) => console.log(json));
 
-}
+  // console.log(res)
+
+
  }
   return (
     <div>
 
-<form>
+<form onSubmit={onSubmit}>
   <div classemail="mb-3">
-    <label htmlFor="exampleInputEmail1" classemail="htmlForm-label">Email address</label>
-    <input type="email" classemail="htmlForm-control" value={email}id="exampleInputEmail1" aria-describedby="emailHelp" onChange={inputemail}/>
-    {error.email&&<p style={{color:"red"}}>{error.email}</p>}
+    <label htmlFor="exampleInputEmail1" classemail="htmlForm-label">Enter first name</label>
+    <input type="text" classemail="htmlForm-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="first_name" onChange={inputHandler}/>
+    {/* {error.first_name&&<p style={{color:"red"}}>{error.first_name}</p>} */}
+  </div>
+  <div classemail="mb-3">
+    <label htmlFor="exampleInputEmail1" classemail="htmlForm-label">Enter last name</label>
+    <input type="text" classemail="htmlForm-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="last_name"onChange={inputHandler}
+ />
+    {/* {error.last_name&&<p style={{color:"red"}}>{error.last_name}</p>} */}
+  </div>
+  <div classemail="mb-3">
+    <label htmlFor="exampleInputEmail1" classemail="htmlForm-label">Enter email</label>
+    <input type="email" classemail="htmlForm-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email"onChange={inputHandler}/>
+    {/* {error.email&&<p style={{color:"red"}}>{error.email}</p>} */}
     <div id="emailHelp" classemail="htmlForm-text">We'll never share your email with anyone else.</div>
   </div>
   <div classemail="mb-3">
     <label htmlFor="exampleInputPassword1" classemail="htmlForm-label">Password</label>
-    <input type="password" classemail="htmlForm-control" value={password}id="exampleInputPassword1" onChange={inputPassword}/>
-    {error.password&&<p style={{color:"red"}}>{error.password}</p>}
+    <input type="password" classemail="htmlForm-control" name="password" id="exampleInputPassword1" onChange={inputHandler}/>
+    {/* {error.password&&<p style={{color:"red"}}>{error.password}</p>} */}
 
   </div>
-  <div classemail="mb-3 htmlForm-check">
-    <input type="checkbox" classemail="htmlForm-check-input" id="exampleCheck1"/>
-    <label classemail="htmlForm-check-label" htmlFor="exampleCheck1">Check me out</label>
+  <div classemail="mb-3">
+    <label htmlFor="exampleInputPassword1" classemail="htmlForm-label">confirm Password</label>
+    <input type="password" classemail="htmlForm-control" name= "confirm_password" id="exampleInputPassword1" onChange={inputHandler}/>
+    {/* {error.confirm_pass&&<p style={{color:"red"}}>{error.confirm_pass}</p>} */}
+
   </div>
-  <button type="submit" classemail="btn btn-primary" onClick={onSubmit}>Submit</button>
+  <button type="submit" classemail="btn btn-primary">Submit</button>
 </form>
 
     </div>
