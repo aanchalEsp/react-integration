@@ -1,5 +1,5 @@
 import Nav from '../Component/nav'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Footer from './footer';
 import Header from './header';
@@ -15,13 +15,16 @@ function Dashboard() {
   const [balance, setBalance] = useState(null)
   const [error, setError] = useState("")
   const [check, setCheck] = useState(false)
-
+useEffect(()=>{
+  check_Connection()
+},[])
   const detectCurrentProvider = () => {
     let provider;
     if (window.ethereum) {
       provider = window.ethereum;
-      console.log("ethereum connected")
    
+      console.log("ethereum connected")
+
     } else if (window.web3) {
       provider = window.web3.currentProvider;
       console.log("web3 connected")
@@ -33,26 +36,26 @@ function Dashboard() {
     }
     return provider;
   };
-
+const check_Connection=async ()=>{
+  const web3 = new Web3 (window.ethereum);
+  const userAccount = await web3.eth.getAccounts();
+  const account = userAccount[0];
+  setAddress(account)
+  setCheck(true)
+}
   const onConnect = async () => {
     try {
       const currentProvider = detectCurrentProvider();
       if (currentProvider) {
-     
+
         if (currentProvider !== window.ethereum) {
           console.log(
             'Non-Ethereum browser detected. You should install MetaMask!'
           );
         }
-        // else{
-        //   setCheck(true)
-        // }
         await currentProvider.request({ method: 'eth_requestAccounts' });
         const web3 = new Web3(currentProvider);
         const userAccount = await web3.eth.getAccounts();
-        if(!address===""){
-          setCheck(true)
-        }
         const account = userAccount[0];
         console.log(account)
         setAddress(account)
@@ -91,20 +94,20 @@ function Dashboard() {
         <Nav />
         <Header />
         <SideBar />
-        {!check?
-        <div> 
-       
+
+        <div>
+
           {/* <button className="btn login-form__btn submit" onClick={detectCurrentProvider} style={{ marginLeft: "700px", alignItems: "center" }}>connect to wallet</button> */}
           <br></br>
           <h4 class="text-center mt-15" style={{ color: 'red' }}>{error}</h4>
           <button className="btn login-form__btn submit" onClick={onConnect} style={{ marginLeft: "700px", alignItems: "center" }}>connect to Metamask</button>
-          <h4 class="text-center mt-15" style={{ color: 'blue' }}>{address}</h4>
-          <h4 class="text-center mt-15" style={{ color: 'blue' }}>{balance}</h4>
-          <br></br>
-          </div>
-       :
 
-          <div class="container h-100">
+          <div>       <h4 class="text-center mt-15" style={{ color: 'blue' }}>{address}</h4>
+            <h4 class="text-center mt-15" style={{ color: 'blue' }}>{balance}</h4></div>
+          <br></br>
+        </div>
+
+        {/* <div>  <div class="container h-100">
             <div class="row justify-content-center h-100">
               <div class="col-xl-6">
                 <div class="form-input-content">
@@ -129,9 +132,10 @@ function Dashboard() {
               </div>
             </div>
           </div>
-}
-        </>
-      
+</div> */}
+
+      </>
+
     </div>
 
 
