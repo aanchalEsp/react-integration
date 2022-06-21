@@ -4,59 +4,66 @@ import Footer from './footer'
 import SideBar from './sideBar'
 import { Link, useNavigate } from 'react-router-dom'
 import config from '../config/config';
-
+import Cookies from 'js-cookie'
+import Header from './header';
 
 export default function EditProfile() {
+  const loginData = (!Cookies.get('loginSuccessDemoProject')) ? [] : JSON.parse(Cookies.get('loginSuccessDemoProject'));
+
+  if(loginData==""){
+      window.location.href = `${config.baseUrl}`
+  }
+  else{
+
+  }
   return (
-   
-      <div>
-        <Nav/>
-     <SideBar/>
 
-<div>
-<div className="row justify-content-center h-100">
-    <div className="row">
-      <div className="col-lg-12">
-        <div className="card">
-          <div className="card-body">
-            <h4 className="card-title">Edit profile</h4>
-         
-            <div className="basic-form">
-              <form>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control input-default"
-                    placeholder="Edit Name"
-                  />
-                </div>
-                <div className="form-group">
-                  <input
-                    type="phone"
-                    className="form-control input-flat"
-                    placeholder="Edit Phone number"
-                  />
-                </div>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control input-rounded"
-                    placeholder="Edit Email"
-                  />
-                </div>
-                <Link to={`${config.baseUrl}profile`}><button class="btn login-form__btn submit w-100">Submit</button></Link>  
+    <div>
+ 
+      <> 
+      <Nav />
+      <Header />
+      <SideBar />
 
-              </form>
-              <Footer/>
+      <div class="login-form-bg h-100">
+        <div class="container h-100">
+            <div class="row justify-content-center h-100">
+                <div class="col-xl-6">
+                    <div class="form-input-content">
+                        <div class="card login-form mb-0">
+                            <div class="card-body pt-5">
+                                <a class="text-center" > <h4>Edit your Profile</h4></a>
+                                <form class="mt-5 mb-5 login-input">
+                                    <div class="form-group">
+                                        <label>Edit Name</label>
+                                        <input type="email" class="form-control" placeholder="Name"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Edit Emails</label>
+                                        <input type="email" class="form-control" placeholder="Email"/>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Edit Mobile no.</label>
+                                        <input type="email" class="form-control" placeholder="Mobile"/>
+                                    </div>
+                                    <div class="form-group">
+                                    <label>Edit Password</label>
+                                        <input type="password" class="form-control" placeholder="Password"/>
+                                    </div>
+                                   <Link to={`${config.baseUrl}profile`}> <button class="btn login-form__btn submit w-100">DONE</button></Link>
+                                </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-</div>
-  </div>
+      
+    </>
+    </div>
 
-  
-)
+
+  )
 }
