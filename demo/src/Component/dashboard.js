@@ -9,16 +9,21 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import minABI from './abi.json'
 import minABIS from './abitoken.json'
+import stackingAbi from './stack.json'
+
+import ecom from './ecom.json'
+import SimpleDateTime from 'react-simple-timestamp-to-date'
 import '../Component/tablestyle.css'
 function Dashboard() {
   const currentDate = new Date();
 
 
-  let tokenContractAddress = "0x1D655DF7D70434438355C68c8db47C63c4d70b10";
-  let ownerAddress = "0x3e014c4Fbaf266fa83f6ef875Ef0D0666B51fb31"
+  let tokenContractAddress = "0xD8D20035C948EA1ade98135A70c3a5AbeE5c6d64";
   let contractAddress = "0x5e240876C40089efaE1281477444CF8D14667900"
 
-
+  const [ownerAddress, setownerAddress] = useState("");
+  const [forms, setForm] = useState({ title: "", des: '', price: "" });
+  const [buyer, setBuyer] = useState({ productId: '', money: "" })
   const [address, setAddress] = useState("");
   const [getBalance, setBalance] = useState()
   const [check, setCheck] = useState(false)
@@ -31,16 +36,22 @@ function Dashboard() {
   const [isLOgin, setIsLogin] = useState(false)
   const [transactionData, setTransactionData] = useState([])
   const [hide, setHide] = useState(false)
+  const [price, setPrice] = useState("")
+  const [stackValue, setStackValue] = useState("")
+  const [showRewards, setShowRewards] = useState()
+  const [showStackBal, setShowStackBal] = useState()
+  const [withdrawal, setWithdrawal] = useState()
 
 
   // const[details, setDetails]=useState({})
 
 
   const getAppTransactions = () => {
-    fetch('https://api-rinkeby.etherscan.io/api?module=account&action=txlist&address=0x3e014c4Fbaf266fa83f6ef875Ef0D0666B51fb31&startblock=0&endblock=9999999999&page=1&offset=100&sort=asc&apikey=PURXA7E3XYNJ6FZYY6CMZT78J61FYKU7QM')
+    fetch('https://api-rinkeby.etherscan.io/api?module=account&action=txlist&address=0x3e014c4Fbaf266fa83f6ef875Ef0D0666B51fb31&startblock=0&endblock=9999999999&page=1&offset=500&sort=desc&apikey=PURXA7E3XYNJ6FZYY6CMZT78J61FYKU7QM')
       .then(response => response.json())
       .then(data => setTransactionData(data.result));
-      setHide(true)
+
+    setHide(true)
   }
 
   useEffect(() => {
@@ -49,6 +60,19 @@ function Dashboard() {
 
     }
   }, []);
+  const inputHandler = (e) => {
+    const { name, value } = e.target
+    setForm((old) => {
+      return { ...old, [name]: value }
+    })
+  }
+
+  const inputBuyer = (e) => {
+    const { name, value } = e.target
+    setBuyer((old) => {
+      return { ...old, [name]: value }
+    })
+  }
 
   const detectCurrentProvider = () => {
     let provider;
@@ -78,6 +102,7 @@ function Dashboard() {
       setAddress(account);
       setCheck(true);
       getTokenBal(account);
+      setownerAddress(account)
     }
   }
 
@@ -87,6 +112,7 @@ function Dashboard() {
     let tokenBalance = await contract.methods.balanceOf(fromAddress).call();
     setToken(tokenBalance / 10 ** 18)
   }
+
 
   const onConnect = async () => {
     try {
@@ -138,9 +164,6 @@ function Dashboard() {
     let fromAddress = address
     let contract = new web3.eth.Contract(minABIS, tokenContractAddress)
     let amount = web3.utils.toWei(enterAamount);
-    let tokenBalance = await contract.methods.balanceOf(fromAddress).call();
-    setToken(tokenBalance)
-    console.log(tokenBalance)
     let tx = await contract.methods.transfer(toAddress, amount).encodeABI();
 
     web3.eth.sendTransaction({
@@ -166,17 +189,61 @@ function Dashboard() {
     });
 
   }
-  const contract_Function = async () => {
+  // const contract_Function = async () => {
+  //   const web3 = new Web3(window.ethereum);
+  //   let contract = new web3.eth.Contract(minABI, contractAddress)
+  //   let getFunctions = await contract.methods.Owner().call();
+  //   console.log(getFunctions)
+  //   setShow(getFunctions)
+  //   let getValues = await contract.methods.UserRegistration(ownerAddress).call();
+  //   console.log(getValues)
+  //   let checkLogin = await contract.methods.login(ownerAddress).call();
+  //   console.log(checkLogin)
+  //   setIsLogin(checkLogin)
+
+  // }
+
+  const ecommerce_fucntion = async () => {
     const web3 = new Web3(window.ethereum);
-    let contract = new web3.eth.Contract(minABI, contractAddress)
-    let getFunctions = await contract.methods.Owner().call();
-    console.log(getFunctions)
-    setShow(getFunctions)
-    let getValues = await contract.methods.UserRegistration(ownerAddress).call();
-    console.log(getValues)
-    let checkLogin = await contract.methods.login(ownerAddress).call();
-    console.log(checkLogin)
-    setIsLogin(checkLogin)
+    let contract = new web3.eth.Contract(ecom, "0xBd56226e3C1D85B831F78eA5a8AcA5E0f5A8faC3")
+    let num = Number(forms.price);
+    num = num * 10 ** 18;
+    let str = String(num);
+    let setValues = await contract.methods.registeredSeller(forms.title, forms.des, str).send({ from: ownerAddress });
+    console.log(setValues)
+
+
+
+  }
+  const buy = async () => {
+    const web3 = new Web3(window.ethereum);
+
+    let contract = new web3.eth.Contract(ecom, "0xBd56226e3C1D85B831F78eA5a8AcA5E0f5A8faC3")
+    let getPrice = await contract.methods.getProductPrice(price).call();
+    console.log(getPrice)
+    getPrice = getPrice / 10 ** 18;
+    console.log(getPrice);
+    let finalPrice = String(getPrice)
+    let moneys = web3.utils.toWei(finalPrice, 'ether')
+    let buy = await contract.methods.buy(price).send({ from: ownerAddress, value: moneys });
+    console.log(buy)
+  }
+  const delivery = async () => {
+    const web3 = new Web3(window.ethereum);
+
+    let contract = new web3.eth.Contract(ecom, "0xBd56226e3C1D85B831F78eA5a8AcA5E0f5A8faC3")
+
+    let delivery = await contract.methods.delivery(7).send({ from: ownerAddress });
+    console.log(delivery)
+
+  }
+  const getPrice = async () => {
+    const web3 = new Web3(window.ethereum);
+
+    let contract = new web3.eth.Contract(ecom, "0xBd56226e3C1D85B831F78eA5a8AcA5E0f5A8faC3")
+
+    let delivery = await contract.methods.getProductPrice(price).call();
+    console.log(delivery)
 
   }
   const set_Function = async () => {
@@ -186,6 +253,34 @@ function Dashboard() {
     console.log({ setValues })
     let updateValues = await contract.methods.updateUser(ownerAddress, "aaaaaa", "aaaaa", "aaa@gmail.com", 12345, 12345).send({ from: ownerAddress });
     console.log(updateValues)
+
+  }
+
+  const stack_Token = async () => {
+    const web3 = new Web3(window.ethereum);
+    let contract = new web3.eth.Contract(stackingAbi, "0x2CF7BA9d509F4198acc49F07A4314a3763f7f113")
+    let stackToken = await contract.methods.stakeTokens(stackValue).send({ from: ownerAddress });
+    setShowStackBal(stackValue);
+    console.log(stackToken)
+
+  }
+
+
+  const view_Rewards = async () => {
+    const web3 = new Web3(window.ethereum);
+    let contract = new web3.eth.Contract(stackingAbi, "0x2CF7BA9d509F4198acc49F07A4314a3763f7f113")
+    let rewards = await contract.methods.ViewclaimRewards().call();
+    setShowRewards(rewards);
+
+    console.log(rewards)
+
+  }
+
+  const withdraw_rewards = async () => {
+    const web3 = new Web3(window.ethereum);
+    let contract = new web3.eth.Contract(stackingAbi, "0x2CF7BA9d509F4198acc49F07A4314a3763f7f113")
+    let withdrawAmount = await contract.methods.withdrawRewards(withdrawal).send({ from: ownerAddress });
+    console.log(withdrawAmount)
 
   }
 
@@ -266,8 +361,33 @@ function Dashboard() {
               <h4>account : {address}</h4>
               <h4>balance : {getBalance}</h4>
               <h4>Token Balance: {token}</h4>
+              <div className='col-md-6'>
+                <div className='form-group'>
+                  <label>Stack Token and claim rewards</label>
+                  <input type="number" value={stackValue} onChange={(e) => setStackValue(e.target.value)} className="form-control" />
+                  <button className='btn btn-info' onClick={stack_Token}>stack Tokens</button>
+                  <h3 style={{ color: "blue" }}>{`you have stack amount`}{" "}{showStackBal}</h3>
+
+                </div>
+
+                <br></br>
+                <button className='btn btn-primary' onClick={view_Rewards}>view Rewards</button>
+                <h3 style={{ color: "blue" }}>{`you have total Rewards `}{showRewards}</h3>
+                <br></br>
+                <br></br>
+
+                <div className='form-group'>
+                  <input type="number" value={withdrawal} onChange={(e) => setWithdrawal(e.target.value)} className="form-control" />
+                  <button className='btn btn-danger' onClick={withdraw_rewards}>Claim Rewards</button>
+                  <h3 style={{ color: "blue" }}>{`you have withdrawn rewards`}{" "}{withdrawal}</h3>
+                </div>
 
 
+                <br></br> 
+
+
+
+              </div>
               <div className='row'>
                 <div className='col-md-12'>
                   <div className='col-md-6'>
@@ -287,6 +407,8 @@ function Dashboard() {
                     </div>
 
 
+
+
                     <div className='form-group'>
                       <button className='btn btn-info' onClick={trans_Ether}>{`${loading} Ether`}</button>
                       <button style={{ marginLeft: "50px" }} className='btn btn-info' onClick={trans_Token}>{`${loading} Token`}</button>
@@ -294,11 +416,40 @@ function Dashboard() {
                       {/* 
                       <button className='btn btn-info' onClick={contract_Function}>get Functions</button>
                       <button className='btn btn-info' onClick={set_Function}>set  Functions</button> */}
-                      <button style={{ marginLeft: "50px" }} className='btn btn-info' onClick={getAppTransactions}>GetAll transactions</button>
+                      {/* <button style={{ marginLeft: "50px" }} className='btn btn-info' onClick={getAppTransactions}>GetAll transactions</button> */}
+                      {/* <button onClick={buy}>check 2</button>
+<button onClick={delivery}>delivery</button> */}
+                    </div>
+                    <div>
+                      <h3>Registered user</h3>
+                      <label>Enter title</label>
+                      <input type="text" name="title" className="form-control" onChange={inputHandler} />
+                      <br></br>
+                      <label>Enter Description</label>
+                      <input type="text" name="des" className="form-control" onChange={inputHandler} />
+                      <br></br>
+                      <label>Enter price</label>
+                      <input type="number" name="price" className="form-control" onChange={inputHandler} />
+                      <br></br>
+                      <button className='btn btn-info' onClick={ecommerce_fucntion}>Register seller</button>
+                    </div>
+                    <div>
+                      <h3>Buy product </h3>
+                      <label>Enter the product code</label>
+                      {/* <input type="number" name="productId" className="form-control" onChange={inputBuyer} />
+{/* <br></br>              <label>Enter the amount</label>
+                      <input type="number" name="money" className="form-control" onChange={inputBuyer} /> */}
+                      <br></br>
+                      {/* <button  className='btn btn-info'onClick={buy}>Buy product</button> */}
 
+
+
+                      <input type="number" className="form-control" onChange={(e) => setPrice(e.target.value)} />
+                      <br></br>
+                      <button className='btn btn-info' onClick={buy}>get price</button>
                     </div>
 
-                   {hide? <div style={{ height: '380px', width: '1000px', overflow: 'auto' }} className="fixTableHead">
+                    {hide ? <div style={{ height: '380px', width: '1000px', overflow: 'auto' }} className="fixTableHead">
 
                       <table className="fixTableHead thead th " cellspacing="0" width="100%">
                         <thead >
@@ -321,11 +472,9 @@ function Dashboard() {
                               <td>{item.from}</td>
                               <td>{item.to}</td>
                               <td>{item.value / 10 ** 18}</td>
-                              <td>{Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(item.timestamp)}</td>
-                              <td>{item.hash}</td>
+                              <td><SimpleDateTime dateSeparator="/" timeSeparator="-" format="YMD">{item.timeStamp}</SimpleDateTime></td>                                <td>{item.hash}</td>
 
                             </tr>))
-
 
 
                           }
@@ -333,8 +482,8 @@ function Dashboard() {
                         </tbody>
                       </table>
 
-                    </div>:""
-}
+                    </div> : ""
+                    }
                   </div>
 
 
