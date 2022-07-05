@@ -256,14 +256,12 @@ function Dashboard() {
 
   const stack_Token = async () => {
     const web3 = new Web3(window.ethereum);
-    let amount = web3.utils.fromWei(web3.utils.toWei(
-			web3.utils.toBN((stackValue)*10**18), // converts Number to BN, which is accepted by `toWei()`
-			'ether'
-		));
+    let moneys = web3.utils.toWei(stackValue, 'ether')
+
     let ERCcontract = new web3.eth.Contract(minABIS, tokenContractAddress)
-    let approveERC = await ERCcontract.methods.approve("0xfd07Ca8EBeBaD09beC57EBc8E1f6619e7660739a", amount).send({ from: ownerAddress });
+    let approveERC = await ERCcontract.methods.approve("0x9d0e79b4AadB333a8a3850305777A7CBCb27b151", moneys).send({ from: ownerAddress });
     console.log(approveERC)
-    let stackingcontract = new web3.eth.Contract(stackingAbi, "0xfd07Ca8EBeBaD09beC57EBc8E1f6619e7660739a")
+    let stackingcontract = new web3.eth.Contract(stackingAbi, "0x9d0e79b4AadB333a8a3850305777A7CBCb27b151")
     let stackToken = await stackingcontract.methods.stakeTokens(amount).send({ from: ownerAddress });
     setShowStackBal(stackValue);
     console.log(stackToken)
@@ -273,9 +271,9 @@ function Dashboard() {
 
   const view_Rewards = async () => {
     const web3 = new Web3(window.ethereum);
-    let contract = new web3.eth.Contract(stackingAbi, "0xfd07Ca8EBeBaD09beC57EBc8E1f6619e7660739a")
+    let contract = new web3.eth.Contract(stackingAbi, "0x9d0e79b4AadB333a8a3850305777A7CBCb27b151")
     let rewards = await contract.methods.ViewclaimRewards().call();
-    setShowRewards(rewards/10**18);
+    setShowRewards(rewards);
   
     console.log(rewards)
 
@@ -283,12 +281,8 @@ function Dashboard() {
 
   const withdraw_rewards = async () => {
     const web3 = new Web3(window.ethereum);
-    let amount = web3.utils.fromWei(web3.utils.toWei(
-			web3.utils.toBN((withdrawal)*10**18), // converts Number to BN, which is accepted by `toWei()`
-			'ether'
-		));
-    alert(amount)
-    let contract = new web3.eth.Contract(stackingAbi, "0xfd07Ca8EBeBaD09beC57EBc8E1f6619e7660739a")
+   
+    let contract = new web3.eth.Contract(stackingAbi, "0x9d0e79b4AadB333a8a3850305777A7CBCb27b151")
     let withdrawAmount = await contract.methods.withdrawRewards(amount).send({ from: ownerAddress });
     console.log(withdrawAmount)
 
