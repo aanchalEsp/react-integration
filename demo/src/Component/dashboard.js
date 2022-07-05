@@ -18,7 +18,7 @@ function Dashboard() {
   const currentDate = new Date();
 
 
-  let tokenContractAddress = "0xD8D20035C948EA1ade98135A70c3a5AbeE5c6d64";
+  let tokenContractAddress = "0xff9c7C4B9ef142cc78e735b8EC4CCc0941C9AdeC";
   let contractAddress = "0x5e240876C40089efaE1281477444CF8D14667900"
 
   const [ownerAddress, setownerAddress] = useState("");
@@ -32,18 +32,15 @@ function Dashboard() {
   const [error, setError] = useState({})
   const [loading, setLoading] = useState("send")
   const [token, setToken] = useState(null)
-  const [showRegistration, setShow] = useState("")
-  const [isLOgin, setIsLogin] = useState(false)
   const [transactionData, setTransactionData] = useState([])
   const [hide, setHide] = useState(false)
   const [price, setPrice] = useState("")
-  const [stackValue, setStackValue] = useState("")
+  const [stackValue, setStackValue] = useState()
   const [showRewards, setShowRewards] = useState()
   const [showStackBal, setShowStackBal] = useState()
-  const [withdrawal, setWithdrawal] = useState()
+  const [withdrawal, setWithdrawal] = useState("")
 
 
-  // const[details, setDetails]=useState({})
 
 
   const getAppTransactions = () => {
@@ -109,8 +106,9 @@ function Dashboard() {
   const getTokenBal = async (fromAddress) => {
     const web3 = new Web3(window.ethereum);
     let contract = new web3.eth.Contract(minABIS, tokenContractAddress)
-    let tokenBalance = await contract.methods.balanceOf(fromAddress).call();
-    setToken(tokenBalance / 10 ** 18)
+    let tokenBalance = await  contract.methods.balanceOf(fromAddress).call();
+    setToken(tokenBalance/10**18)
+    console.log(tokenBalance)
   }
 
 
@@ -258,8 +256,15 @@ function Dashboard() {
 
   const stack_Token = async () => {
     const web3 = new Web3(window.ethereum);
-    let contract = new web3.eth.Contract(stackingAbi, "0x2CF7BA9d509F4198acc49F07A4314a3763f7f113")
-    let stackToken = await contract.methods.stakeTokens(stackValue).send({ from: ownerAddress });
+    let amount = web3.utils.fromWei(web3.utils.toWei(
+			web3.utils.toBN((stackValue)*10**18), // converts Number to BN, which is accepted by `toWei()`
+			'ether'
+		));
+    let ERCcontract = new web3.eth.Contract(minABIS, tokenContractAddress)
+    let approveERC = await ERCcontract.methods.approve("0xfd07Ca8EBeBaD09beC57EBc8E1f6619e7660739a", amount).send({ from: ownerAddress });
+    console.log(approveERC)
+    let stackingcontract = new web3.eth.Contract(stackingAbi, "0xfd07Ca8EBeBaD09beC57EBc8E1f6619e7660739a")
+    let stackToken = await stackingcontract.methods.stakeTokens(amount).send({ from: ownerAddress });
     setShowStackBal(stackValue);
     console.log(stackToken)
 
@@ -268,18 +273,23 @@ function Dashboard() {
 
   const view_Rewards = async () => {
     const web3 = new Web3(window.ethereum);
-    let contract = new web3.eth.Contract(stackingAbi, "0x2CF7BA9d509F4198acc49F07A4314a3763f7f113")
+    let contract = new web3.eth.Contract(stackingAbi, "0xfd07Ca8EBeBaD09beC57EBc8E1f6619e7660739a")
     let rewards = await contract.methods.ViewclaimRewards().call();
-    setShowRewards(rewards);
-
+    setShowRewards(rewards/10**18);
+  
     console.log(rewards)
 
   }
 
   const withdraw_rewards = async () => {
     const web3 = new Web3(window.ethereum);
-    let contract = new web3.eth.Contract(stackingAbi, "0x2CF7BA9d509F4198acc49F07A4314a3763f7f113")
-    let withdrawAmount = await contract.methods.withdrawRewards(withdrawal).send({ from: ownerAddress });
+    let amount = web3.utils.fromWei(web3.utils.toWei(
+			web3.utils.toBN((withdrawal)*10**18), // converts Number to BN, which is accepted by `toWei()`
+			'ether'
+		));
+    alert(amount)
+    let contract = new web3.eth.Contract(stackingAbi, "0xfd07Ca8EBeBaD09beC57EBc8E1f6619e7660739a")
+    let withdrawAmount = await contract.methods.withdrawRewards(amount).send({ from: ownerAddress });
     console.log(withdrawAmount)
 
   }
@@ -378,7 +388,7 @@ function Dashboard() {
 
                 <div className='form-group'>
                   <input type="number" value={withdrawal} onChange={(e) => setWithdrawal(e.target.value)} className="form-control" />
-                  <button className='btn btn-danger' onClick={withdraw_rewards}>Claim Rewards</button>
+                  <button className='btn btn-danger' onClick={withdraw_rewards}>Withdraw Rewards</button>
                   <h3 style={{ color: "blue" }}>{`you have withdrawn rewards`}{" "}{withdrawal}</h3>
                 </div>
 

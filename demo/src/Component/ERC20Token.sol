@@ -55,10 +55,10 @@ mapping(address=>mapping(address=>uint)) allowed;
 uint256 public remainingLimit;
 
 constructor(address  minter){
-    _name="Mint";
-    _symbol="MNT";
+    _name="TrialToken";
+    _symbol="TT";
     _decimals = 18;
-    _totalSupply=10000000* 10**_decimals;
+    _totalSupply=10000* 10**_decimals;
     _minter=minter;
     tokenBalanceMinter[_minter]=_totalSupply;
 

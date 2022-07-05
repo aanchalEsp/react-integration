@@ -1,45 +1,6 @@
 [
 	{
 		"inputs": [],
-		"name": "acceptOwner",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_to",
-				"type": "address"
-			}
-		],
-		"name": "changeOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "tokenToBeStack",
-				"type": "uint256"
-			}
-		],
-		"name": "stakeTokens",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
 	},
@@ -63,6 +24,65 @@
 		"type": "event"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "UserTokens",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "StackTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "currentTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "rewardTime",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "finalTimes",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "balance",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "perc",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "stacked_value",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "totalRewards",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "transferRewards",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "ViewclaimRewards",
 		"outputs": [
@@ -76,21 +96,22 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "acceptOwner",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "_ClaimedValue",
-				"type": "uint256"
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
 			}
 		],
-		"name": "withdrawRewards",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
+		"name": "changeOwnership",
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -121,19 +142,6 @@
 				"internalType": "address",
 				"name": "",
 				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "finalTimes",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -238,58 +246,6 @@
 	},
 	{
 		"inputs": [],
-		"name": "perc",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "rewardTime",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "stacked_value",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "StackTime",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "stackValue",
 		"outputs": [
 			{
@@ -302,21 +258,27 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "totalReward",
-		"outputs": [
+		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "",
+				"name": "tokenToBeStack",
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"name": "stakeTokens",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [],
-		"name": "totalRewards",
+		"name": "totalReward",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -341,8 +303,14 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "transferRewards",
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_ClaimedValue",
+				"type": "uint256"
+			}
+		],
+		"name": "withdrawRewards",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -350,7 +318,7 @@
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "view",
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]
