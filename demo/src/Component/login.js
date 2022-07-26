@@ -4,12 +4,24 @@ import config from '../config/config';
 import { LoginAction } from '../Action/user.action';
 import Cookies from 'js-cookie'
 import toast, { Toaster } from 'react-hot-toast';
-
+import { FullNode } from 'chia-client';
 import { Toast } from 'bootstrap';
+// import https from https-browserify;
 
 
 
 export default function Login(props) {
+    
+    const fullNode = new FullNode({
+        protocol: 'https',
+        hostname: 'localhost',
+        port: 8555
+    });
+    
+    const blockchain = fullNode.getBlockchainState();
+    
+    console.log(blockchain.blockchain_state.space);
+    
     const loginData = (!Cookies.get('loginSuccessDemoProject')) ? [] : JSON.parse(Cookies.get('loginSuccessDemoProject'));
 
     if(loginData==""){
@@ -74,7 +86,8 @@ toast.success(res.msg)
         
     
 }
-   
+
+
 
   return (
     

@@ -135,8 +135,13 @@ function transferredToken() public view returns(uint){
  return UserTokens[user].transferRewards;
 }
 
-
-
+0x5B38Da6a701c568545dCfcB03FcB875f56beddC4- deploy smart contract address
+0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2- new owner should be
+10000000000000000000000- total tokens
+0xdD870fA1b7C4700F2BD7f44238821C26f7392148-minter address
+10000000000000000000000- minter balance
+0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2- minter send 1000 to this address
+0x5B38Da6a701c568545dCfcB03FcB875f56beddC4 minter approve this address with rs 5000
 
 }
-
+https://levelup.gitconnected.com/writing-my-first-chia-blockchain-program-part-1-introduction-a10cd8eddece

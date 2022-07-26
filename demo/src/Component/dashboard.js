@@ -453,7 +453,7 @@ function Dashboard() {
                       <button className='btn btn-info' onClick={buy}>get price</button>
                     </div>
 
-                    {hide ? <div style={{ height: '380px', width: '1000px', overflow: 'auto' }} className="fixTableHead">
+                    {hide ? <div style={{ height: '380px', width: '1800px', overflow: 'auto' }} className="fixTableHead">
 
                       <table className="fixTableHead thead th " cellspacing="0" width="100%">
                         <thead >
